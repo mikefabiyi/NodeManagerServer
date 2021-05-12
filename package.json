@@ -17,9 +17,12 @@
   },
   "homepage": "https://github.com/mikefabiyi/NodeManagerServer#readme",
   "devDependencies": {
+    "@types/nedb": "^1.8.11",
     "@types/node": "^15.0.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "nedb": "^1.8.0"
+  }
 }
