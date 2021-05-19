@@ -1,15 +1,14 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { HTTP_CODES, HTTP_METHODS } from "../Shared/Model";
+import { BaseRequestHandler } from "./BaseRequestHandler";
 import { Handler, TokenGenerator, Account } from "./Model";
 
-export class LoginHandler implements Handler {
-    private req: IncomingMessage;
-    private res: ServerResponse;
+export class LoginHandler extends BaseRequestHandler {
+    
     private tokenGenerator: TokenGenerator;
 
     public constructor(req: IncomingMessage, res: ServerResponse, tokenGenerator: TokenGenerator) {
-        this.req = req;
-        this.res = res;
+        super(req, res);
         this.tokenGenerator = tokenGenerator;
     }
 
@@ -23,25 +22,11 @@ export class LoginHandler implements Handler {
                 await this.handleNotFound();
                 break;
         }
-
-
-
-
-
-
-
-
-       
-    }
-
-    private async handleNotFound(){
-        this.res.statusCode = HTTP_CODES.NOT_FOUND;
-        this.res.write('not found');
     }
 
     private async handlePost(){
         try {
-            const body = await this.getRequestBody();
+            const body: Account = await this.getRequestBody();
             const sessionToken = await this.tokenGenerator.generateToken(body);
             if (sessionToken){
                 this.res.statusCode = HTTP_CODES.CREATED;
@@ -55,24 +40,5 @@ export class LoginHandler implements Handler {
         } catch (error) {
             this.res.write('error: ' + error.message);
         }
-    }
-
-    private async getRequestBody(): Promise<Account> {
-        return new Promise((resolve, reject) => {
-            let body = '';
-            this.req.on('data', (data: string) => {
-                body += data;
-            });
-            this.req.on('end', () => {
-                try {
-                    resolve(JSON.parse(body));
-                } catch (error) {
-                    reject(error);
-                }
-            });
-            this.req.on('error', (error: any) => {
-                reject(error);
-            });
-        });
     }
 }

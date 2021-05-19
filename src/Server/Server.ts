@@ -1,6 +1,8 @@
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { Authorizer } from '../Authorization/Authorizer';
+import { HTTP_CODES } from '../Shared/Model';
 import { LoginHandler } from './LoginHandler';
+import { UserHandler } from './UserHandler';
 import { Utils } from './Utils';
 
 export class Server {
@@ -16,8 +18,13 @@ export class Server {
                     case 'login':
                         await new LoginHandler(req, res, this.authorizer).handleRequest();
                         break;
-                    case 'data':
-
+                    case 'users':
+                        await new UserHandler(req, res).handleRequest();
+                        break;
+                    default:
+                        res.statusCode = HTTP_CODES.NOT_FOUND;
+                        res.write('Not Found');
+                        break;
                 }
 
                 res.end();
