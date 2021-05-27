@@ -19,7 +19,7 @@ export class Server {
                         await new LoginHandler(req, res, this.authorizer).handleRequest();
                         break;
                     case 'users':
-                        await new UserHandler(req, res).handleRequest();
+                        await new UserHandler(req, res, this.authorizer).handleRequest();
                         break;
                     default:
                         res.statusCode = HTTP_CODES.NOT_FOUND;

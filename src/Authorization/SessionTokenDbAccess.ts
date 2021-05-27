@@ -3,7 +3,7 @@ import { resolve } from "path";
 import { SessionToken } from "../Server/Model";
 
 
-export class SessionTokenDbAccess{
+export class SessionTokenDbAccess {
     private nedb: Nedb;
 
     /**
@@ -15,10 +15,10 @@ export class SessionTokenDbAccess{
 
     }
 
-    public async storeSessionToken(token: SessionToken): Promise<void>{
-        return new Promise((resolve, reject) =>{
-            this.nedb.insert(token, (err: Error | null) =>{
-                if(err)
+    public async storeSessionToken(token: SessionToken): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.nedb.insert(token, (err: Error | null) => {
+                if (err)
                     reject(err);
                 else
                     resolve();
@@ -26,10 +26,10 @@ export class SessionTokenDbAccess{
         });
     }
 
-    public async getSessionToken(tokenId: string): Promise<SessionToken | undefined>{
-        return new  Promise((resolve, reject) =>{
-            this.nedb.find({tokenId: tokenId, valid: true}, (err: Error, docs: SessionToken[]) =>{
-                if(err)
+    public async getToken(tokenId: string): Promise<SessionToken | undefined> {
+        return new Promise((resolve, reject) => {
+            this.nedb.find({ tokenId: tokenId, valid: true }, (err: Error, docs: SessionToken[]) => {
+                if (err)
                     reject(err);
                 else
                     resolve(docs.length == 0 ? undefined : docs[0]);
